@@ -1,0 +1,9 @@
+#!/bin/bash
+#PBS -q NICEshort
+#PBS -N TMS_test
+#PBS -j oe
+#PBS -l nodes=1:ppn=32
+
+cd $PBS_O_WORKDIR
+source ~/.bashrc
+mpirun -np 32 /home/lz/lz/Software/gromacs467-onfly-3d/bin/mdrun_mpi -s run1.tpr -v -deffnm run1 -dlb yes
