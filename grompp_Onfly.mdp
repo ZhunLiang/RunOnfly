@@ -28,10 +28,10 @@ rvdw		    =  1.2		; short-range van der Waals cutoff (in nm)
 fourierspacing      =  0.1	; no need to specify spacing
 ;fourier_nx          =  30
 ;fourier_ny          =  30
-fourier_nz 	    =  4000
+;fourier_nz 	    =  4000
 pme_order           =  4
 ewald_rtol          =  1e-5
-;ewald_geometry      =  3dc ; when use vacuum, add this to fix the boxsize This option must be commented when use CPM!!!!
+ewald_geometry      =  3d ; when use vacuum, add this to fix the boxsize This option must be commented when use CPM!!!!
 
 ;Annealing
 ;annealing                = single
