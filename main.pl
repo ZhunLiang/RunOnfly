@@ -3,6 +3,8 @@
 #like: perl main.pl 615 end_one.gro end_one.top -1_1_1
 #
 
+$RUN_MD=1;
+
 sub GeneraNdx{   #change with @Ratio,also need change .mdp file
   my ($Solid,$Liquid,$temp);
   $Solid="";
@@ -82,6 +84,9 @@ GeneraNdx($ARGV[1]);
 system "mkdir onfly";
 system "cp $ARGV[1] $ARGV[2] *.itp para_dens_vel.dat onfly/";
 system "mv index.ndx grompp-4.6.mdp run.pbs MSD_out.dat onfly/";
-system "cd onfly/; grompp -f grompp-4.6.mdp -c $ARGV[1] -p $ARGV[2] -n index.ndx -o run1.tpr";
-system "cd onfly/; qsub run.pbs";
 
+if($RUN_MD==1)
+{
+  system "cd onfly/; grompp -f grompp-4.6.mdp -c $ARGV[1] -p $ARGV[2] -n index.ndx -o run1.tpr";
+  system "cd onfly/; qsub run.pbs";
+}
