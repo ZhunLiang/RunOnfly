@@ -10,29 +10,45 @@ chomp($Dir_code);
 
 sub GetFolder{
     my @temp;
+    my @folder;
     if($_[0]){
         chdir $_[0];
         @folder=<{$_[1]*/}>;
-        foreach $folder(@folder){
-              @temp = (@temp,"$_[0]$folder");
-        }
+        #foreach $folder(@folder){
+        #      @temp = (@temp,"$_[0]$folder");
+        #}
     chdir $Dir_code;
     }
-    return @temp;
+    #return @temp;
+    return @folder;
 }
+
+sub GetJobName{
+    my @temp;
+    @temp=split/$_[0]/,$_[1];
+    my @temp2=split/\//,@temp[1];
+    my $jobname=@temp2[0];
+    return $jobname;
+}
+
 
 @folder=GetFolder($ARGV[0],$ARGV[1]);
 
+
+
 foreach $folder(@folder){
-    if(-e $folder){ 
-      system "cp GetMSDpara.py  grompp_Onfly.mdp  main.pl  run.pbs $folder";
-      chdir $folder;
-      system "perl main.pl $ARGV[2] $ARGV[3] $ARGV[4]";
+    $total_folder="$ARGV[0]$folder";
+    $job=GetJobName($ARGV[1],$folder);
+    if(-e $total_folder){ 
+      system "cp GetMSDpara.py  grompp_Onfly.mdp  main.pl RUN.pbs $total_folder";
+      chdir $total_folder;
+      system "perl main.pl $job $ARGV[2] $ARGV[3] $ARGV[4]";
       system "rm -f GetMSDpara.py  grompp_Onfly.mdp  main.pl  run.pbs";
-      chdir $Dir_code;}
+      chdir $Dir_code;
+    }
     else{
       print "#-------ERROR-------#";
-      print "$folder should be a director";
+      print "$total_folder should be a director";
       print "#--------end--------#";
       exit();
     }

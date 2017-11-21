@@ -1,5 +1,6 @@
 #!/bin/perl
-#input order: gro top ratio
+#input order: jobname gro top ratio
+#like: perl main.pl 615 end_one.gro end_one.top -1_1_1
 #
 
 sub GeneraNdx{   #change with @Ratio,also need change .mdp file
@@ -36,11 +37,11 @@ sub GetInputPara{
 }
 
 system "python GetMSDpara.py";
-@Ratio=GetInputPara($ARGV[2]);
+@Ratio=GetInputPara($ARGV[3]);
 @MoleName = GetMSD("NAME");
 $MoleTypeNum = @MoleName;
 for($i=0;$i<$MoleTypeNum;$i+=1){
-  $temp = `grep -w @MoleName[$i] $ARGV[1]`;
+  $temp = `grep -w @MoleName[$i] $ARGV[2]`;
   if($temp){
     @Name_Out[$count] = @MoleName[$i];
     $count += 1;
@@ -73,9 +74,14 @@ system "cp grompp_Onfly.mdp grompp-4.6.mdp";
 system "sed -i 's/SOLID/$SolidName/g' grompp-4.6.mdp";
 system "sed -i 's/LIQUID/$LiquidName/g' grompp-4.6.mdp";
 
-GeneraNdx($ARGV[0]);
+system "cp RUN.pbs run.pbs";
+system "sed -i 's/JOBNAME/$ARGV[0]/g' run.pbs";
+
+GeneraNdx($ARGV[1]);
 
 system "mkdir onfly";
-system "cp $ARGV[0] $ARGV[1] *.itp para_dens_vel.dat onfly/";
-system "mv index.ndx grompp-4.6.mdp run.pbs onfly";
+system "cp $ARGV[1] $ARGV[2] *.itp para_dens_vel.dat onfly/";
+system "mv index.ndx grompp-4.6.mdp run.pbs MSD_out.dat onfly/";
+system "cd onfly/; grompp -f grompp-4.6.mdp -c $ARGV[1] -p $ARGV[2] -n index.ndx -o run1.tpr";
+system "cd onfly/; qsub run.pbs";
 
