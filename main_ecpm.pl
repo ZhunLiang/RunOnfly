@@ -105,7 +105,7 @@ foreach $para_file(@para_files){
   system "cp RUN-ecpm.pbs run-ecpm.pbs";
   system "sed -i 's/JOBNAME/$job_name/g' run-ecpm.pbs";
   system "cp *.itp index.ndx $ARGV[2] $ARGV[3] grompp-ecpm.mdp para_dens_vel.dat run-ecpm.pbs $folder_name";
-  system "mv $para_file $folder_name getPot_parameters.dat";
+  system "mv $para_file $folder_name/getPot_parameters.dat";
   system "cp cpm_input/CPM_control.dat cpm_input/inv_MatrixA.dat $folder_name";
 }
 
