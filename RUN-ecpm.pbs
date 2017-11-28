@@ -1,0 +1,9 @@
+#!/bin/bash
+#PBS -q fglong
+#PBS -N JOBNAME
+#PBS -j oe
+#PBS -l nodes=1:ppn=32
+
+cd $PBS_O_WORKDIR
+source ~/.bashrc
+~/Software/gromacs467-ecpm-onfly-lz/bin/mdrun -s run1.tpr -v -deffnm run1 -ntmpi 1 -pin on -notunepme -noappend -cpi > output1.dat
